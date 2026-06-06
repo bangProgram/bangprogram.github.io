@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>테밀리 클럽 초대</title>
+  <meta name="description" content="테밀리(Temily) 테니스 클럽에 초대되었습니다. 앱을 설치하고 초대 코드로 바로 가입하세요." />
+  <!--
+    ⚙️ 설정값 — 스토어 URL.
+    - Android: Play Store 패키지 com.temily.temily
+    - iOS: 앱 출시 후 App Store 숫자 ID 로 교체 필요 (현재 검색 URL 폴백)
+  -->
+  <style>
+    :root {
+      --lime: #7BC74A;
+      --sky: #4AC1E0;
+      --ink: #1a1f1a;
+      --muted: #6b766b;
+      --bg: #f6faf3;
+      --card: #ffffff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100dvh;
+      padding: 24px;
+    }
+    .card {
+      width: 100%;
+      max-width: 400px;
+      background: var(--card);
+      border-radius: 24px;
+      padding: 36px 28px 32px;
+      box-shadow: 0 12px 40px rgba(40, 90, 30, 0.10);
+      text-align: center;
+    }
+    .logo {
+      width: 76px;
+      height: 76px;
+      border-radius: 22px;
+      margin: 0 auto 20px;
+      background: linear-gradient(135deg, var(--lime), var(--sky));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 38px;
+      box-shadow: 0 8px 20px rgba(123, 199, 74, 0.35);
+    }
+    .brand { font-size: 15px; font-weight: 700; color: var(--lime); letter-spacing: 0.5px; margin-bottom: 6px; }
+    h1 { font-size: 22px; line-height: 1.4; margin-bottom: 10px; }
+    p.sub { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 24px; }
+    .code-box {
+      background: linear-gradient(135deg, rgba(123,199,74,0.10), rgba(74,193,224,0.10));
+      border: 1.5px solid rgba(123,199,74,0.35);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 24px;
+    }
+    .code-label { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+    .code-value { font-size: 28px; font-weight: 800; letter-spacing: 6px; color: #3a8f1f; }
+    .code-value.empty { font-size: 15px; letter-spacing: 0; color: var(--muted); font-weight: 500; }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 700;
+      text-decoration: none;
+      margin-bottom: 12px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.08s ease, box-shadow 0.2s ease;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--lime), var(--sky));
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(123, 199, 74, 0.3);
+    }
+    .btn-ghost {
+      background: #f0f4ef;
+      color: var(--ink);
+    }
+    .hint { font-size: 12px; color: var(--muted); margin-top: 16px; line-height: 1.6; }
+    .platform { display: none; }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="logo">🎾</div>
+    <div class="brand">TEMILY · 테밀리</div>
+    <h1>테니스 클럽에<br />초대되었습니다</h1>
+    <p class="sub">앱을 설치하면 아래 초대 코드로 바로 가입할 수 있어요.</p>
+
+    <div class="code-box">
+      <div class="code-label">초대 코드</div>
+      <div id="code" class="code-value empty">앱에서 확인</div>
+    </div>
+
+    <a id="openApp" class="btn btn-ghost" href="#">앱에서 열기</a>
+    <a id="storeBtn" class="btn btn-primary" href="#">앱 설치하기</a>
+
+    <p class="hint">
+      앱이 이미 설치되어 있다면 링크가 자동으로 앱에서 열립니다.<br />
+      열리지 않으면 “앱에서 열기”를 눌러주세요.
+    </p>
+  </main>
+
+  <script>
+    // ── 스토어 URL ──
+    var PLAY_URL = 'https://play.google.com/store/apps/details?id=com.temily.temily';
+    // iOS: App Store 출시 후 숫자 ID 로 교체 (예: https://apps.apple.com/app/id1234567890)
+    var APPSTORE_URL = 'https://apps.apple.com/kr/app/temily/id0000000000';
+
+    var params = new URLSearchParams(window.location.search);
+    var code = (params.get('code') || '').trim().toUpperCase();
+
+    if (code) {
+      var el = document.getElementById('code');
+      el.textContent = code;
+      el.classList.remove('empty');
+    }
+
+    var ua = navigator.userAgent || '';
+    var isIOS = /iPad|iPhone|iPod/.test(ua);
+    var isAndroid = /Android/.test(ua);
+
+    // 설치 버튼 → 플랫폼별 스토어
+    var storeBtn = document.getElementById('storeBtn');
+    storeBtn.href = isIOS ? APPSTORE_URL : PLAY_URL;
+
+    // 앱에서 열기 → 커스텀 스킴 폴백 (Universal/App Link 로 안 열린 경우 수동 시도)
+    var openApp = document.getElementById('openApp');
+    openApp.href = 'com.temily.temily://join?code=' + encodeURIComponent(code);
+  </script>
+</body>
+</html>

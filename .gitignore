@@ -1,0 +1,27 @@
+# === IDE / Editor ===
+.idea/
+.vscode/
+
+# === OS files ===
+.DS_Store
+Thumbs.db
+*.stackdump
+
+# === Secrets / Credentials ===
+*.env
+*.env.*
+**/supabase_constants.dart
+**/google-services.json
+**/GoogleService-Info.plist
+*.jks
+*.keystore
+key.properties
+**/credentials.json
+**/service-account*.json
+*.pem
+*.p12
+*.key
+
+# === Dart generated (if any Flutter assets land here) ===
+*.g.dart
+*.freezed.dart

@@ -1,0 +1,15 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["U22635Q5RK.com.temily.temily"],
+        "components": [
+          {
+            "/": "/temily/join*",
+            "comment": "테밀리 클럽 초대 링크"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.temily.temily",
+      "sha256_cert_fingerprints": [
+        "11:3A:64:CE:00:03:C4:9B:2D:79:09:F4:BC:A5:6D:65:CB:B8:31:B2:47:AC:C7:90:82:25:F3:D9:FC:08:52:6C",
+        "3D:50:6C:2F:EA:01:FC:EB:CF:67:85:D6:ED:6F:EE:60:8C:29:14:92:B4:AF:0F:A5:6A:A8:43:95:26:30:0C:1B"
+      ]
+    }
+  }
+]
