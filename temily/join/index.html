@@ -45,13 +45,11 @@
       height: 76px;
       border-radius: 22px;
       margin: 0 auto 20px;
-      background: linear-gradient(135deg, var(--lime), var(--sky));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 38px;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--lime), var(--sky)); /* 이미지 로드 전 배경 */
       box-shadow: 0 8px 20px rgba(123, 199, 74, 0.35);
     }
+    .logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .brand { font-size: 15px; font-weight: 700; color: var(--lime); letter-spacing: 0.5px; margin-bottom: 6px; }
     h1 { font-size: 22px; line-height: 1.4; margin-bottom: 10px; }
     p.sub { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 24px; }
@@ -94,9 +92,9 @@
 </head>
 <body>
   <main class="card">
-    <div class="logo">🎾</div>
+    <div class="logo"><img id="logoImg" src="temily-icon.png" alt="테밀리" /></div>
     <div class="brand">TEMILY · 테밀리</div>
-    <h1>테니스 클럽에<br />초대되었습니다</h1>
+    <h1 id="title">테니스 클럽에<br />초대되었습니다</h1>
     <p class="sub">앱을 설치하면 아래 초대 코드로 바로 가입할 수 있어요.</p>
 
     <div class="code-box">
@@ -126,6 +124,39 @@
       var el = document.getElementById('code');
       el.textContent = code;
       el.classList.remove('empty');
+    }
+
+    // ── 클럽 아이콘 동적 로드 ──
+    //  초대 코드로 클럽을 익명 조회(anon key, RLS clubs_select_public 허용).
+    //  커버 이미지가 있으면 로고로 교체, 없거나 실패하면 기본 테밀리 아이콘 유지.
+    var SUPABASE_URL = 'https://eedzqqexhiysfphwmbkm.supabase.co';
+    var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVlZHpxcWV4aGl5c2ZwaHdtYmttIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwODQ1MzYsImV4cCI6MjA5MTY2MDUzNn0.fvG7LWS6jaAZUBdBFOFQEiKqggKQJtPKA-5cNQ3myOU';
+
+    if (code) {
+      fetch(
+        SUPABASE_URL + '/rest/v1/clubs?invite_code=eq.' + encodeURIComponent(code) +
+        '&select=name,image_url&limit=1',
+        { headers: { apikey: SUPABASE_ANON_KEY, Authorization: 'Bearer ' + SUPABASE_ANON_KEY } }
+      )
+      .then(function (r) { return r.ok ? r.json() : []; })
+      .then(function (rows) {
+        var club = rows && rows[0];
+        if (!club) return;
+        // 클럽명 → 제목 ("○○에 초대되었습니다")
+        if (club.name) {
+          var safe = document.createElement('div');
+          safe.textContent = club.name;
+          document.getElementById('title').innerHTML = safe.innerHTML + '에<br />초대되었습니다';
+        }
+        // 커버 이미지 → 로고 (없으면 기본 테밀리 아이콘 유지)
+        if (club.image_url) {
+          var img = document.getElementById('logoImg');
+          // 클럽 이미지 로드 실패 시 테밀리 아이콘으로 복귀
+          img.onerror = function () { img.onerror = null; img.src = 'temily-icon.png'; };
+          img.src = club.image_url;
+        }
+      })
+      .catch(function () { /* 네트워크 실패 → 기본 테밀리 아이콘 유지 */ });
     }
 
     var ua = navigator.userAgent || '';
