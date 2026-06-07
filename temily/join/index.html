@@ -117,8 +117,10 @@
     // iOS: App Store 출시 후 숫자 ID 로 교체 (예: https://apps.apple.com/app/id1234567890)
     var APPSTORE_URL = 'https://apps.apple.com/kr/app/temily/id0000000000';
 
+    // 초대 파라미터는 'invite' 사용. ('code' 는 supabase 가 OAuth 콜백으로
+    //  오인해 앱에서 인증 오류를 내므로 폐기. 구버전 링크 호환용으로만 폴백 읽기.)
     var params = new URLSearchParams(window.location.search);
-    var code = (params.get('code') || '').trim().toUpperCase();
+    var code = (params.get('invite') || params.get('code') || '').trim().toUpperCase();
 
     if (code) {
       var el = document.getElementById('code');
@@ -169,7 +171,7 @@
 
     // 앱에서 열기 → 커스텀 스킴 폴백 (Universal/App Link 로 안 열린 경우 수동 시도)
     var openApp = document.getElementById('openApp');
-    openApp.href = 'com.temily.temily://join?code=' + encodeURIComponent(code);
+    openApp.href = 'com.temily.temily://join?invite=' + encodeURIComponent(code);
   </script>
 </body>
 </html>
