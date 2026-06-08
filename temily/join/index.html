@@ -114,8 +114,9 @@
   <script>
     // ── 스토어 URL ──
     var PLAY_URL = 'https://play.google.com/store/apps/details?id=com.temily.temily';
-    // iOS: App Store 출시 후 숫자 ID 로 교체 (예: https://apps.apple.com/app/id1234567890)
-    var APPSTORE_URL = 'https://apps.apple.com/kr/app/temily/id0000000000';
+    // iOS: 실제 App Store 앱 ID. 앱이 KR 스토어 한정 출시라 /kr/ 국가코드 필수
+    // (국가코드 생략 시 기본 스토어프론트로 해석돼 404 "An Error Occurred").
+    var APPSTORE_URL = 'https://apps.apple.com/kr/app/id6774798539';
 
     // 초대 파라미터는 'invite' 사용. ('code' 는 supabase 가 OAuth 콜백으로
     //  오인해 앱에서 인증 오류를 내므로 폐기. 구버전 링크 호환용으로만 폴백 읽기.)
